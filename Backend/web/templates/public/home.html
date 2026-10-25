@@ -5,6 +5,11 @@
 {{define "content"}}
 <style>
   /* Base Desktop Styling */
+  .desktop-layout-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+  
   .desktop-icon {
     position: absolute;
     top: 20px;
@@ -37,7 +42,6 @@
     border-color: white;
   }
 
-  /* Structural enhancements for windows */
   .window {
     position: absolute; 
     box-shadow: 1px 1px 0 #000;
@@ -58,7 +62,6 @@
     font-size: 32px;
   }
 
-  /* Taskbar Styling */
   .taskbar {
     position: fixed;
     bottom: 0;
@@ -84,126 +87,178 @@
     font-weight: normal;
     padding: 2px 8px;
     margin-right: 4px;
-    min-width: 140px;
+    min-width: 100px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    touch-action: manipulation; /* Prevents double-tap zoom on mobile */
   }
   .taskbar-tab.open {
     box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
     background: #e4e4e4;
   }
+
+  /* --- MOBILE STYLES --- */
+  @media (max-width: 768px) {
+    .desktop-layout-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      padding-bottom: 60px; /* Leave space for taskbar */
+      gap: 20px;
+    }
+    .window {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      width: 100% !important;
+      max-width: 480px;
+      margin: 0 !important;
+      z-index: 1 !important;
+    }
+    .desktop-icon {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      margin-top: 10px;
+    }
+    .title-bar-controls {
+      display: none; /* Hide minimize/close buttons on mobile */
+    }
+    
+    /* Taskbar Mobile Adjustments */
+    .start-btn, .divider {
+      display: none !important; /* Hide Start button and divider */
+    }
+    .taskbar {
+      gap: 4px; /* Add small space between tabs */
+    }
+    .taskbar-tab {
+      flex: 1; /* Share available space evenly */
+      min-width: 0; /* Allow shrinking below 100px if needed */
+      margin-right: 0;
+      text-align: center; /* Center text nicely in the equal-sized buttons */
+      padding: 2px 4px;
+    }
+
+    /* Force 16px font size on inputs to completely stop iOS auto-zoom on click */
+    input, textarea {
+      font-size: 16px !important;
+    }
+  }
 </style>
 
-<!-- Desktop Icon -->
-<a href="/app-preview" class="desktop-icon">
-  <svg class="icon-graphic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-    <path fill="#c0c0c0" d="M2,4 h28 v20 h-28 z" stroke="#000" stroke-width="2"/>
-    <path fill="#008080" d="M4,6 h24 v16 h-24 z"/>
-    <path fill="#c0c0c0" d="M12,24 h8 v4 h-8 z" stroke="#000" stroke-width="2"/>
-    <path fill="#c0c0c0" d="M8,28 h16 v2 h-16 z" stroke="#000" stroke-width="2"/>
-  </svg>
-  <div class="icon-label">App_Preview.exe</div>
-</a>
+<div class="desktop-layout-wrapper">
+  <!-- Profile Window -->
+  <div id="window-profile" class="window" style="width: 480px; top: 10%; left: 10%; z-index: 11;">
+    <div class="title-bar">
+      <div class="title-bar-text">About Me</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize" class="win-min-btn"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" class="win-close-btn"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 15px; padding: 5px;">
+        <div class="avatar-box">👨‍💻</div>
+        <div style="flex-grow: 1;">
+          <h1 style="margin: 0 0 4px 0; font-size: 20px;">Jakub Jędra</h1>
+          <p style="margin: 0; color: #333;">Software Developer</p>
+        </div>
+      </div>
+      <fieldset style="margin-bottom: 12px;">
+        <legend>What I Do</legend>
+        <p style="margin: 5px 0;">Building functional, data-driven backends and robust web applications.</p>
+      </fieldset>
+      <fieldset>
+        <legend>Education</legend>
+        <div class="field-row" style="margin-bottom: 4px;">
+          <label style="width: 80px;">University:</label>
+          <span style="font-weight: bold;">AGH University of Science and Technology</span>
+        </div>
+        <div class="field-row">
+          <label style="width: 80px;">Faculty:</label>
+          <span>Energy Engineering, Kraków</span>
+        </div>
+      </fieldset>
+    </div>
+  </div>
 
-<!-- Profile Window -->
-<div id="window-profile" class="window" style="width: 480px; top: 10%; left: 10%; z-index: 11;">
-  <div class="title-bar">
-    <div class="title-bar-text">About Me</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" class="win-min-btn"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" class="win-close-btn"></button>
-    </div>
-  </div>
-  <div class="window-body">
-    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 15px; padding: 5px;">
-      <div class="avatar-box">👨‍💻</div>
-      <div style="flex-grow: 1;">
-        <h1 style="margin: 0 0 4px 0; font-size: 20px;">Jakub Jędra</h1>
-        <p style="margin: 0; color: #333;">Software Developer</p>
+  <!-- Contact Window (Notepad Style) -->
+  <div id="window-contact" class="window" style="width: 360px; top: 25%; left: 40%; z-index: 10;">
+    <div class="title-bar">
+      <div class="title-bar-text">Contact_Info.txt - Notepad</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize" class="win-min-btn"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" class="win-close-btn"></button>
       </div>
     </div>
-    <fieldset style="margin-bottom: 12px;">
-      <legend>What I Do</legend>
-      <p style="margin: 5px 0;">Building functional, data-driven backends and robust web applications.</p>
-    </fieldset>
-    <fieldset>
-      <legend>Education</legend>
-      <div class="field-row" style="margin-bottom: 4px;">
-        <label style="width: 80px;">University:</label>
-        <span style="font-weight: bold;">AGH University of Science and Technology</span>
+    <div class="window-body" style="margin: 0; padding: 0;">
+      <div style="display: flex; padding: 2px 8px; gap: 15px; font-size: 12px; border-bottom: 1px solid #fff; box-shadow: 0 1px 0 #dfdfdf; margin-bottom: 2px; cursor: default;">
+        <span><u>F</u>ile</span>
+        <span><u>E</u>dit</span>
+        <span><u>S</u>earch</span>
+        <span><u>H</u>elp</span>
       </div>
-      <div class="field-row">
-        <label style="width: 80px;">Faculty:</label>
-        <span>Energy Engineering, Kraków</span>
+      <div style="padding: 4px;">
+        <div class="sunken-panel" style="background: #fff; height: 140px; padding: 8px; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; font-size: 14px; overflow-y: auto;">
+          Phone:    +48 517 632 825<br><br>
+          Mail:     <a href="mailto:jjakub542@gmail.com">jjakub542@gmail.com</a><br><br>
+          LinkedIn: <a href="https://www.linkedin.com/in/jakub-j%C4%99dra-1746b8239/" target="_blank">jakub-jędra</a>
+        </div>
       </div>
-    </fieldset>
+    </div>
   </div>
-</div>
 
-<!-- Contact Window (Notepad Style) -->
-<div id="window-contact" class="window" style="width: 360px; top: 25%; left: 40%; z-index: 10;">
-  <div class="title-bar">
-    <div class="title-bar-text">Contact_Info.txt - Notepad</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" class="win-min-btn"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" class="win-close-btn"></button>
-    </div>
-  </div>
-  <div class="window-body" style="margin: 0; padding: 0;">
-    <div style="display: flex; padding: 2px 8px; gap: 15px; font-size: 12px; border-bottom: 1px solid #fff; box-shadow: 0 1px 0 #dfdfdf; margin-bottom: 2px; cursor: default;">
-      <span><u>F</u>ile</span>
-      <span><u>E</u>dit</span>
-      <span><u>S</u>earch</span>
-      <span><u>H</u>elp</span>
-    </div>
-    <div style="padding: 4px;">
-      <div class="sunken-panel" style="background: #fff; height: 140px; padding: 8px; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; font-size: 14px; overflow-y: auto;">
-        Phone:    +48 517 632 825<br><br>
-        Mail:     <a href="mailto:jjakub542@gmail.com">jjakub542@gmail.com</a><br><br>
-        LinkedIn: <a href="https://www.linkedin.com/in/jakub-j%C4%99dra-1746b8239/" target="_blank">jakub-jędra</a>
+  <!-- Leave a Message Window -->
+  <div id="window-message" class="window" style="width: 340px; top: 40%; left: 60%; z-index: 9;">
+    <div class="title-bar">
+      <div class="title-bar-text">Message.exe</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize" class="win-min-btn"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" class="win-close-btn"></button>
       </div>
     </div>
+    <div class="window-body">
+      <form id="contactForm" onsubmit="submitMessage(event)">
+        <input type="hidden" name="_csrf" value="{{.CSRF}}">
+        
+        <div class="field-row-stacked" style="width: 100%; margin-bottom: 8px;">
+          <label for="msg-name">Name:</label>
+          <input id="msg-name" name="name" type="text" required>
+        </div>
+        <div class="field-row-stacked" style="width: 100%; margin-bottom: 8px;">
+          <label for="msg-email">Email:</label>
+          <input id="msg-email" name="email" type="email" required>
+        </div>
+        <div class="field-row-stacked" style="width: 100%; margin-bottom: 12px;">
+          <label for="msg-content">Content:</label>
+          <textarea id="msg-content" name="content" rows="4" required></textarea>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+          <span id="form-status" style="font-size: 11px; display: none;"></span>
+          <button type="submit" id="msg-submit-btn">Send</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- Leave a Message Window -->
-<div id="window-message" class="window" style="width: 340px; top: 40%; left: 60%; z-index: 9;">
-  <div class="title-bar">
-    <div class="title-bar-text">Message.exe</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" class="win-min-btn"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" class="win-close-btn"></button>
-    </div>
-  </div>
-  <div class="window-body">
-    <form id="contactForm" onsubmit="submitMessage(event)">
-      <!-- CSRF Token injected from Go handler -->
-      <input type="hidden" name="_csrf" value="{{.CSRF}}">
-      
-      <div class="field-row-stacked" style="width: 100%; margin-bottom: 8px;">
-        <label for="msg-name">Name:</label>
-        <input id="msg-name" name="name" type="text" required>
-      </div>
-      <div class="field-row-stacked" style="width: 100%; margin-bottom: 8px;">
-        <label for="msg-email">Email:</label>
-        <input id="msg-email" name="email" type="email" required>
-      </div>
-      <div class="field-row-stacked" style="width: 100%; margin-bottom: 12px;">
-        <label for="msg-content">Content:</label>
-        <textarea id="msg-content" name="content" rows="4" required></textarea>
-      </div>
-      
-      <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
-        <span id="form-status" style="font-size: 11px; display: none;"></span>
-        <button type="submit" id="msg-submit-btn">Send</button>
-      </div>
-    </form>
-  </div>
+  <!-- Desktop Icon (Moved to bottom of flow for mobile) -->
+  <a href="/app-preview" class="desktop-icon">
+    <svg class="icon-graphic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+      <path fill="#c0c0c0" d="M2,4 h28 v20 h-28 z" stroke="#000" stroke-width="2"/>
+      <path fill="#008080" d="M4,6 h24 v16 h-24 z"/>
+      <path fill="#c0c0c0" d="M12,24 h8 v4 h-8 z" stroke="#000" stroke-width="2"/>
+      <path fill="#c0c0c0" d="M8,28 h16 v2 h-16 z" stroke="#000" stroke-width="2"/>
+    </svg>
+    <div class="icon-label">App_Preview.exe</div>
+  </a>
 </div>
 
 <!-- Bottom Taskbar -->
@@ -221,11 +276,17 @@
 <!-- OS Interactions Script -->
 <script>
   let highestZIndex = 11;
+  const isMobile = () => window.innerWidth <= 768;
 
   function toggleWindow(winId) {
     const win = document.getElementById(winId);
-    const tab = document.getElementById('tab-' + winId);
     
+    if (isMobile()) {
+      win.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    const tab = document.getElementById('tab-' + winId);
     if (win.style.display === 'none') {
       win.style.display = 'block';
       tab.classList.add('open');
@@ -246,6 +307,8 @@
     const titleBar = elmnt.querySelector('.title-bar');
     
     titleBar.onmousedown = function(e) {
+      if (isMobile()) return; 
+      
       e.preventDefault();
       bringToFront(elmnt);
       pos3 = e.clientX;
@@ -270,7 +333,13 @@
     }
   }
 
-  // AJAX Form Submission
+  window.addEventListener('resize', () => {
+    if (isMobile()) {
+      document.querySelectorAll('.window').forEach(win => win.style.display = 'block');
+      document.querySelectorAll('.taskbar-tab').forEach(tab => tab.classList.add('open'));
+    }
+  });
+
   async function submitMessage(e) {
     e.preventDefault();
     const form = e.target;
@@ -312,14 +381,17 @@
 
   document.querySelectorAll('.window').forEach(win => {
     makeDraggable(win);
-    win.addEventListener('mousedown', () => bringToFront(win));
+    
+    win.addEventListener('mousedown', () => {
+      if (!isMobile()) bringToFront(win);
+    });
     
     const minBtn = win.querySelector('.win-min-btn');
     const closeBtn = win.querySelector('.win-close-btn');
     
     const hideAction = (e) => {
       e.stopPropagation(); 
-      toggleWindow(win.id);
+      if (!isMobile()) toggleWindow(win.id); 
     };
 
     if (minBtn) minBtn.onclick = hideAction;
