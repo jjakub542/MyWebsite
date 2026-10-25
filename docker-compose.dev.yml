@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_DB: ${DB_NAME:-my_website_db}
+    ports:
+      - "5433:5432" # Open locally so you can use DBeaver/TablePlus
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-my_website_db}"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.dev # Use the Air live-reloading image
+    container_name: my_website_backend
+    ports:
+      - "8080:8080" # Open to your local browser
+    volumes:
+      - ./Backend:/app # Mount source code for live reloads
+    environment:
+      - PORT=8080
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=secret
+      - DB_NAME=my_website_db
+      - DB_PORT=5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

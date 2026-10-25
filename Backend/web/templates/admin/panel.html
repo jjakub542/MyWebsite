@@ -1,0 +1,20 @@
+{{template "base" .}}
+
+{{define "title"}}Admin Panel{{end}}
+
+{{define "content"}}
+<div class="row">
+    <div class="col s12">
+        <h4>Admin Dashboard</h4>
+        
+        <!-- You can render the admin's name here if passed in the template context -->
+        <p class="grey-text">Welcome back. The control panel is currently empty.</p>
+        
+        <form action="/logout" method="POST" style="margin-top: 3rem;">
+            <button type="submit" class="btn red darken-2 waves-effect waves-light">
+                Logout
+            </button>
+        </form>
+    </div>
+</div>
+{{end}}

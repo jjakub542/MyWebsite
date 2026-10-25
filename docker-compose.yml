@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_DB: ${DB_NAME:-my_website_db}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-my_website_db}"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.prod
+    container_name: my_website_backend
+    restart: unless-stopped
+    environment:
+      - PORT=8080
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=secret
+      - DB_NAME=my_website_db
+      - DB_PORT=5433
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy_server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

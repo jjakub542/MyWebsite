@@ -1,0 +1,329 @@
+{{template "base" .}}
+
+{{define "title"}}Jakub Jędra - System{{end}}
+
+{{define "content"}}
+<style>
+  /* Base Desktop Styling */
+  .desktop-icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    width: 80px;
+    cursor: pointer;
+    z-index: 5;
+  }
+  .icon-graphic {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 4px;
+    image-rendering: pixelated;
+  }
+  .icon-label {
+    color: white;
+    background: transparent;
+    padding: 2px 4px;
+    font-size: 11px;
+    text-align: center;
+    border: 1px dotted transparent;
+  }
+  .desktop-icon:hover .icon-label,
+  .desktop-icon:focus .icon-label {
+    background: #000080;
+    border-color: white;
+  }
+
+  /* Structural enhancements for windows */
+  .window {
+    position: absolute; 
+    box-shadow: 1px 1px 0 #000;
+  }
+  .title-bar {
+    cursor: default; 
+  }
+  .avatar-box {
+    width: 64px; 
+    height: 64px; 
+    border: 2px inset #fff; 
+    border-bottom-color: #dfdfdf;
+    border-right-color: #dfdfdf;
+    background: #c0c0c0; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-size: 32px;
+  }
+
+  /* Taskbar Styling */
+  .taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: #c0c0c0;
+    border-top: 2px solid #fff;
+    box-shadow: inset 0 1px 0 #dfdfdf;
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    z-index: 9999;
+  }
+  .start-btn {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 10px;
+  }
+  .taskbar-tab {
+    font-weight: normal;
+    padding: 2px 8px;
+    margin-right: 4px;
+    min-width: 140px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .taskbar-tab.open {
+    box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+    background: #e4e4e4;
+  }
+</style>
+
+<!-- Desktop Icon -->
+<a href="/app-preview" class="desktop-icon">
+  <svg class="icon-graphic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    <path fill="#c0c0c0" d="M2,4 h28 v20 h-28 z" stroke="#000" stroke-width="2"/>
+    <path fill="#008080" d="M4,6 h24 v16 h-24 z"/>
+    <path fill="#c0c0c0" d="M12,24 h8 v4 h-8 z" stroke="#000" stroke-width="2"/>
+    <path fill="#c0c0c0" d="M8,28 h16 v2 h-16 z" stroke="#000" stroke-width="2"/>
+  </svg>
+  <div class="icon-label">App_Preview.exe</div>
+</a>
+
+<!-- Profile Window -->
+<div id="window-profile" class="window" style="width: 480px; top: 10%; left: 10%; z-index: 11;">
+  <div class="title-bar">
+    <div class="title-bar-text">About Me</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize" class="win-min-btn"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close" class="win-close-btn"></button>
+    </div>
+  </div>
+  <div class="window-body">
+    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 15px; padding: 5px;">
+      <div class="avatar-box">👨‍💻</div>
+      <div style="flex-grow: 1;">
+        <h1 style="margin: 0 0 4px 0; font-size: 20px;">Jakub Jędra</h1>
+        <p style="margin: 0; color: #333;">Software Developer</p>
+      </div>
+    </div>
+    <fieldset style="margin-bottom: 12px;">
+      <legend>What I Do</legend>
+      <p style="margin: 5px 0;">Building functional, data-driven backends and robust web applications.</p>
+    </fieldset>
+    <fieldset>
+      <legend>Education</legend>
+      <div class="field-row" style="margin-bottom: 4px;">
+        <label style="width: 80px;">University:</label>
+        <span style="font-weight: bold;">AGH University of Science and Technology</span>
+      </div>
+      <div class="field-row">
+        <label style="width: 80px;">Faculty:</label>
+        <span>Energy Engineering, Kraków</span>
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<!-- Contact Window (Notepad Style) -->
+<div id="window-contact" class="window" style="width: 360px; top: 25%; left: 40%; z-index: 10;">
+  <div class="title-bar">
+    <div class="title-bar-text">Contact_Info.txt - Notepad</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize" class="win-min-btn"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close" class="win-close-btn"></button>
+    </div>
+  </div>
+  <div class="window-body" style="margin: 0; padding: 0;">
+    <div style="display: flex; padding: 2px 8px; gap: 15px; font-size: 12px; border-bottom: 1px solid #fff; box-shadow: 0 1px 0 #dfdfdf; margin-bottom: 2px; cursor: default;">
+      <span><u>F</u>ile</span>
+      <span><u>E</u>dit</span>
+      <span><u>S</u>earch</span>
+      <span><u>H</u>elp</span>
+    </div>
+    <div style="padding: 4px;">
+      <div class="sunken-panel" style="background: #fff; height: 140px; padding: 8px; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; font-size: 14px; overflow-y: auto;">
+        Phone:    +48 517 632 825<br><br>
+        Mail:     <a href="mailto:jjakub542@gmail.com">jjakub542@gmail.com</a><br><br>
+        LinkedIn: <a href="https://www.linkedin.com/in/jakub-j%C4%99dra-1746b8239/" target="_blank">jakub-jędra</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leave a Message Window -->
+<div id="window-message" class="window" style="width: 340px; top: 40%; left: 60%; z-index: 9;">
+  <div class="title-bar">
+    <div class="title-bar-text">Message.exe</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize" class="win-min-btn"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close" class="win-close-btn"></button>
+    </div>
+  </div>
+  <div class="window-body">
+    <form id="contactForm" onsubmit="submitMessage(event)">
+      <!-- CSRF Token injected from Go handler -->
+      <input type="hidden" name="_csrf" value="{{.CSRF}}">
+      
+      <div class="field-row-stacked" style="width: 100%; margin-bottom: 8px;">
+        <label for="msg-name">Name:</label>
+        <input id="msg-name" name="name" type="text" required>
+      </div>
+      <div class="field-row-stacked" style="width: 100%; margin-bottom: 8px;">
+        <label for="msg-email">Email:</label>
+        <input id="msg-email" name="email" type="email" required>
+      </div>
+      <div class="field-row-stacked" style="width: 100%; margin-bottom: 12px;">
+        <label for="msg-content">Content:</label>
+        <textarea id="msg-content" name="content" rows="4" required></textarea>
+      </div>
+      
+      <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+        <span id="form-status" style="font-size: 11px; display: none;"></span>
+        <button type="submit" id="msg-submit-btn">Send</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Bottom Taskbar -->
+<div class="taskbar">
+  <button class="start-btn">
+    🪟 Start
+  </button>
+  <div class="divider" style="width: 2px; height: 80%; background: #dfdfdf; border-right: 1px solid #808080; margin: 0 6px;"></div>
+  
+  <button id="tab-window-profile" class="taskbar-tab open" onclick="toggleWindow('window-profile')">About Me</button>
+  <button id="tab-window-contact" class="taskbar-tab open" onclick="toggleWindow('window-contact')">Contact_Info.txt</button>
+  <button id="tab-window-message" class="taskbar-tab open" onclick="toggleWindow('window-message')">Message.exe</button>
+</div>
+
+<!-- OS Interactions Script -->
+<script>
+  let highestZIndex = 11;
+
+  function toggleWindow(winId) {
+    const win = document.getElementById(winId);
+    const tab = document.getElementById('tab-' + winId);
+    
+    if (win.style.display === 'none') {
+      win.style.display = 'block';
+      tab.classList.add('open');
+      bringToFront(win);
+    } else {
+      win.style.display = 'none';
+      tab.classList.remove('open');
+    }
+  }
+
+  function bringToFront(win) {
+    highestZIndex++;
+    win.style.zIndex = highestZIndex;
+  }
+
+  function makeDraggable(elmnt) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const titleBar = elmnt.querySelector('.title-bar');
+    
+    titleBar.onmousedown = function(e) {
+      e.preventDefault();
+      bringToFront(elmnt);
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    };
+
+    function elementDrag(e) {
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+
+  // AJAX Form Submission
+  async function submitMessage(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const statusText = document.getElementById('form-status');
+    const submitBtn = document.getElementById('msg-submit-btn');
+
+    submitBtn.disabled = true;
+    statusText.style.display = 'block';
+    statusText.style.color = '#333';
+    statusText.textContent = 'Sending...';
+
+    try {
+      const response = await fetch('/message', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        statusText.style.color = 'green';
+        statusText.textContent = 'Sent successfully!';
+        form.reset();
+      } else {
+        statusText.style.color = 'red';
+        statusText.textContent = 'Error sending message.';
+      }
+    } catch (error) {
+      statusText.style.color = 'red';
+      statusText.textContent = 'Network error.';
+    } finally {
+      submitBtn.disabled = false;
+      setTimeout(() => {
+        if (statusText.textContent === 'Sent successfully!') {
+          statusText.style.display = 'none';
+        }
+      }, 3000);
+    }
+  }
+
+  document.querySelectorAll('.window').forEach(win => {
+    makeDraggable(win);
+    win.addEventListener('mousedown', () => bringToFront(win));
+    
+    const minBtn = win.querySelector('.win-min-btn');
+    const closeBtn = win.querySelector('.win-close-btn');
+    
+    const hideAction = (e) => {
+      e.stopPropagation(); 
+      toggleWindow(win.id);
+    };
+
+    if (minBtn) minBtn.onclick = hideAction;
+    if (closeBtn) closeBtn.onclick = hideAction;
+  });
+</script>
+{{end}}

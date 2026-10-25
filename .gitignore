@@ -1,0 +1,35 @@
+# --- Environment & Secrets ---
+.env
+*.env
+.env.local
+
+# --- Go / IzoDrawBackend ---
+/Backend/tmp/
+/Backend/bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.prof
+
+# --- OS Generated Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Docker ---
+docker-data/
+postgres-data/

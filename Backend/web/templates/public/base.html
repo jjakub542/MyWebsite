@@ -1,0 +1,44 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}Jakub Jędra{{end}}</title>
+    <!-- 98.css for authentic Windows 95 styling -->
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        body {
+            background-color: #008080; /* Classic Win95 Teal */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* 98.css handles the pixelated font automatically */
+        }
+        .desktop-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 900px;
+            width: 100%;
+            justify-content: center;
+        }
+        .window {
+            width: 100%;
+            max-width: 400px;
+        }
+        a {
+            color: #0000EE;
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop-container">
+        {{template "content" .}}
+    </div>
+</body>
+</html>
+{{end}}

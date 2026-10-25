@@ -1,0 +1,29 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}My Website{{end}}</title>
+    <!-- Materialize CSS for a clean, out-of-the-box look -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <nav class="blue-grey darken-3">
+        <div class="nav-wrapper container">
+            <a href="/" class="brand-logo">My Site</a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/">Home</a></li>
+                <li><a href="/admin">Admin Panel</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container" style="margin-top: 3rem;">
+        {{template "content" .}}
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
+{{end}}
