@@ -1,14 +1,17 @@
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: postgres_db
-    restart: unless-stopped
+    container_name: my_website_postgres
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
       POSTGRES_DB: ${DB_NAME:-my_website_db}
+    # Removed the port mapping to keep the database secure and hidden from the public internet.
+    # If you need remote access via DBeaver, uncomment this and use a unique port like 5434:
+    # ports:
+    #   - "127.0.0.1:5434:5432" 
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - my_website_pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-my_website_db}"]
       interval: 2s
@@ -19,35 +22,20 @@ services:
   backend:
     build:
       context: ./Backend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.prod # Using your production Dockerfile
     container_name: my_website_backend
-    restart: unless-stopped
+    ports:
+      - "8081:8080" # Maps the host's 8081 to the container's 8080
     environment:
       - PORT=8080
       - DB_HOST=postgres
       - DB_USER=postgres
       - DB_PASSWORD=secret
       - DB_NAME=my_website_db
-      - DB_PORT=5433
+      - DB_PORT=5432 # Internal Docker network port
     depends_on:
       postgres:
         condition: service_healthy
 
-  caddy:
-    image: caddy:2-alpine
-    container_name: caddy_server
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - backend
-
 volumes:
-  pgdata:
-  caddy_data:
-  caddy_config:
+  my_website_pgdata:
