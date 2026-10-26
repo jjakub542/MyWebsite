@@ -12,8 +12,8 @@
   
   .desktop-icon {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 40px;
+    left: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -50,8 +50,8 @@
     cursor: default; 
   }
   .avatar-box {
-    width: 64px; 
-    height: 64px; 
+    width: 96px; 
+    height: 96px; 
     border: 2px inset #fff; 
     border-bottom-color: #dfdfdf;
     border-right-color: #dfdfdf;
@@ -59,7 +59,13 @@
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    font-size: 32px;
+    overflow: hidden; 
+  }
+  .avatar-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
   }
 
   .taskbar {
@@ -92,7 +98,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    touch-action: manipulation; /* Prevents double-tap zoom on mobile */
+    touch-action: manipulation; 
   }
   .taskbar-tab.open {
     box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
@@ -106,7 +112,7 @@
       flex-direction: column;
       align-items: center;
       padding: 10px;
-      padding-bottom: 60px; /* Leave space for taskbar */
+      padding-bottom: 60px; 
       gap: 20px;
     }
     .window {
@@ -125,25 +131,25 @@
       margin-top: 10px;
     }
     .title-bar-controls {
-      display: none; /* Hide minimize/close buttons on mobile */
+      display: none; 
     }
     
-    /* Taskbar Mobile Adjustments */
     .start-btn, .divider {
-      display: none !important; /* Hide Start button and divider */
+      display: none !important; 
     }
     .taskbar {
-      gap: 4px; /* Add small space between tabs */
+      gap: 4px; 
+      overflow-x: auto; /* Allows scrolling taskbar if we add too many tabs */
+      -webkit-overflow-scrolling: touch;
     }
     .taskbar-tab {
-      flex: 1; /* Share available space evenly */
-      min-width: 0; /* Allow shrinking below 100px if needed */
+      flex: 1; 
+      min-width: 60px; /* Adjusted slightly smaller to fit 4 tabs nicely */
       margin-right: 0;
-      text-align: center; /* Center text nicely in the equal-sized buttons */
+      text-align: center; 
       padding: 2px 4px;
     }
 
-    /* Force 16px font size on inputs to completely stop iOS auto-zoom on click */
     input, textarea {
       font-size: 16px !important;
     }
@@ -163,7 +169,9 @@
     </div>
     <div class="window-body">
       <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 15px; padding: 5px;">
-        <div class="avatar-box">👨‍💻</div>
+        <div class="avatar-box">
+          <img src="/static/avatar.jpg" alt="Jakub Jędra">
+        </div>
         <div style="flex-grow: 1;">
           <h1 style="margin: 0 0 4px 0; font-size: 20px;">Jakub Jędra</h1>
           <p style="margin: 0; color: #333;">Software Developer</p>
@@ -191,6 +199,23 @@
     </div>
   </div>
 
+    <div id="window-picture" class="window" style="width: 320px; top: 5%; left: 65%; z-index: 8;">
+    <div class="title-bar">
+      <div class="title-bar-text">Photo.bmp - Image Viewer</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize" class="win-min-btn"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close" class="win-close-btn"></button>
+      </div>
+    </div>
+    <div class="window-body" style="margin: 0; padding: 4px;">
+      <div class="sunken-panel" style="background: #fff; padding: 4px; display: flex; justify-content: center; align-items: center; box-sizing: border-box;">
+        <!-- Update the src attribute with the correct path to your image -->
+        <img src="/static/photo.jpg" alt="Gallery Photo" style="max-width: 100%; height: auto; display: block; image-rendering: pixelated;">
+      </div>
+    </div>
+  </div>
+
   <!-- Contact Window (Notepad Style) -->
   <div id="window-contact" class="window" style="width: 360px; top: 25%; left: 40%; z-index: 10;">
     <div class="title-bar">
@@ -212,7 +237,8 @@
         <div class="sunken-panel" style="background: #fff; height: 140px; padding: 8px; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; font-size: 14px; overflow-y: auto;">
           Phone:    +48 517 632 825<br><br>
           Mail:     <a href="mailto:jjakub542@gmail.com">jjakub542@gmail.com</a><br><br>
-          LinkedIn: <a href="https://www.linkedin.com/in/jakub-j%C4%99dra-1746b8239/" target="_blank">jakub-jędra</a>
+          LinkedIn: <a href="https://www.linkedin.com/in/jakub-j%C4%99dra-1746b8239/" target="_blank">in/jakub-jędra</a><br><br>
+          GitHub:   <a href="https://github.com/jjakub542" target="_blank">jjakub542</a><br>
         </div>
       </div>
     </div>
@@ -275,6 +301,8 @@
   <button id="tab-window-profile" class="taskbar-tab open" onclick="toggleWindow('window-profile')">About Me</button>
   <button id="tab-window-contact" class="taskbar-tab open" onclick="toggleWindow('window-contact')">Contact_Info.txt</button>
   <button id="tab-window-message" class="taskbar-tab open" onclick="toggleWindow('window-message')">Message.exe</button>
+  <!-- NEW Taskbar Tab for Picture Window -->
+  <button id="tab-window-picture" class="taskbar-tab open" onclick="toggleWindow('window-picture')">Photo.bmp</button>
 </div>
 
 <!-- OS Interactions Script -->
