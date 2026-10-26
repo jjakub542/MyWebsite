@@ -40,7 +40,7 @@ func (s *Server) Router() http.Handler {
 	adminGroup.Use(middleware.AdminAuth)
 	adminGroup.GET("/panel", h.ServeAdminPanel)
 
-	appGroup := e.Group("/app-preview")
+	appGroup := e.Group("/app/engineering-thesis")
 	appGroup.GET("", h.ServeSPA)
 	appGroup.GET("/*", h.ServeSPA)
 
